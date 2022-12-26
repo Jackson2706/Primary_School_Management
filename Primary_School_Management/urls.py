@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from . import settings
-from student_management_app import views
+from student_management_app import views, HodViews
 
 urlpatterns = [
-    path('', views.ShowLoginPage),
-    path('doLogin', views.doLogin),
+    path('', views.ShowLoginPage,name="show_login"),
+    path('doLogin', views.doLogin,name="do_login"),
     path('get_user_deail', views.GetUserDetails),
-    path('logout_user', views.logout_user),
+    path('logout_user', views.logout_user, name="logout"),
+    path('admin_home/', HodViews.admin_home,name="admin_home"),
+    path('add_staff', HodViews.add_staff,name="add_staff"),
     path('demo/', views.showDemoPage),
     path('admin/', admin.site.urls),
 
