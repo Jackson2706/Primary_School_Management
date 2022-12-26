@@ -20,6 +20,11 @@ from . import settings
 from student_management_app import views
 
 urlpatterns = [
+    path('', views.ShowLoginPage),
+    path('doLogin', views.doLogin),
+    path('get_user_deail', views.GetUserDetails),
+    path('logout_user', views.logout_user),
     path('demo/', views.showDemoPage),
     path('admin/', admin.site.urls),
+
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
