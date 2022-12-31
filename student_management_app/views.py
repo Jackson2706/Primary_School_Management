@@ -1,7 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-
 
 
 
@@ -19,8 +19,15 @@ def doLogin(request):
         user= authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
         if user != None:
             login(request,user)
-            return HttpResponseRedirect('admin_home')
+            print(user.user_type, type(user.user_type))
+            if user.user_type == "1":
+                return HttpResponseRedirect('admin_home')
+            elif user.user_type == "2":
+                return HttpResponse('staff login')
+            else:
+                return HttpResponse('student login')
         else:
+            messages.error(request, "Invalid Login Details")
             return HttpResponse("Error!")
 
 def GetUserDetails(request):

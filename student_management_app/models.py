@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
@@ -7,8 +7,7 @@ from django.db.models.signals import post_save
 class CustomUser(AbstractUser):
     user_type_data = ((1, "HOD"), (2, "Staff"), (3, "Student"))
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
-    object = models.Manager()
-
+    object = UserManager()
 class AdminHOD(models.Model):
     id = models.AutoField(primary_key=True)
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE, default='Test', null=True, blank=True)
@@ -26,7 +25,7 @@ class Staffs(models.Model):
     object = models.Manager()
 
 
-class Course(models.Model):
+class Courses(models.Model):
     id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=255)
@@ -37,7 +36,7 @@ class Course(models.Model):
 class Subjects(models.Model):
     id = models.AutoField(primary_key=True)
     subject_name = models.CharField(max_length=255)
-    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_id = models.ForeignKey(Courses, on_delete=models.CASCADE)
     staff_id = models.ForeignKey(Staffs, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=255)
     updated_at = models.DateTimeField(auto_now_add=255)
@@ -50,7 +49,7 @@ class Students(models.Model):
     gender = models.CharField(max_length=255)
     profile_pic = models.FileField()
     address = models.TextField()
-    course_id = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
+    course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING)
     session_start_year = models.DateField()
     session_end_year = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -144,8 +143,8 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == 2:
             Staffs.object.create(admin=instance, address="")
         if instance.user_type == 3:
-            Students.object.create(admin=instance, course_id=Course.objects.get(id=1),session_start_year="2020-01-01",
-                                   session_end_year="2020-01-01",address="", profile_pic="", gender="")
+            Students.object.create(admin=instance, course_id=Courses.objects.get(id=1), session_start_year="2020-01-01",
+                                   session_end_year="2020-01-01", address="", profile_pic="", gender="")
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
