@@ -72,8 +72,13 @@ def add_student_save(request):
             course_id=request.POST.get("course")
             sex=request.POST.get("sex")
 
-            profile_pic=""
-
+            if request.FILES['profile_pic']:
+                profile_pic=request.FILES['profile_pic']
+                fs=FileSystemStorage()
+                filename = fs.save(profile_pic.name,profile_pic)
+                profile_pic_url = fs.url(filename)
+            else:
+                profile_pic_url = None
             try:
                 user=CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
                 user.students.address=address
@@ -82,7 +87,7 @@ def add_student_save(request):
                 user.students.session_start_year=session_start
                 user.students.session_end_year=session_end
                 user.students.gender=sex
-                user.students.profile_pic=""
+                user.students.profile_pic=profile_pic_url
                 user.save()
                 messages.success(request,"Successfully Added Student")
                 return HttpResponseRedirect(reverse("add_student"))
@@ -180,6 +185,13 @@ def edit_student_save(request):
         sex = request.POST.get("sex")
         session_start = request.POST.get("session_start")
         session_end = request.POST.get("session_end")
+        if request.FILES.get('profile_pic', False):
+            profile_pic = request.FILES['profile_pic']
+            fs = FileSystemStorage()
+            filename = fs.save(profile_pic.name, profile_pic)
+            profile_pic_url = fs.url(filename)
+        else:
+            profile_pic_url = None
         try:
             user = CustomUser.objects.get(id = student_id)
             user. email = email
@@ -193,7 +205,8 @@ def edit_student_save(request):
             student.gender = sex
             student.session_start_year = session_start
             student.session_end_year = session_end
-
+            if profile_pic_url != None:
+                student.profile_pic = profile_pic_url
             course = Courses.objects.get(id=course_id)
             student.course_id = course
 
