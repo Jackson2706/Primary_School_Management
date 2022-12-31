@@ -2,7 +2,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from student_management_app.EmailBackEnd import EmailBackEnd
+
 
 
 # Create your views here.
@@ -19,7 +19,7 @@ def doLogin(request):
         user= authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
         if user != None:
             login(request,user)
-            return HttpResponseRedirect('admin_hod')
+            return HttpResponseRedirect('admin_home')
         else:
             return HttpResponse("Error!")
 
