@@ -218,3 +218,52 @@ def edit_student_save(request):
             return HttpResponseRedirect(reverse("edit_student", kwargs={"student_id": student_id}))
 
 
+def edit_course(request, course_id):
+    course = Courses.objects.get(id=course_id)
+    return render(request, "hod_template/edit_course_template.html", {"course": course})
+
+def edit_course_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method not allowed</h2>")
+    else:
+        course_id = request.POST.get("course_id")
+        course_name = request.POST.get("course")
+
+        try:
+            course = Courses.objects.get(id=course_id)
+            course.course_name = course_name
+            course.save()
+            messages.success(request, "Successfully Edited Course")
+            return HttpResponseRedirect(reverse("edit_course", kwargs={"course_id": course_id}))
+        except:
+            messages.error(request, "Failed to Edit Course")
+            return HttpResponseRedirect(reverse("edit_course", kwargs={"course_id": course_id}))
+
+def edit_subject(request, subject_id):
+    subject = Subjects.objects.get(id=subject_id)
+    courses = Courses.objects.all()
+    staffs = CustomUser.object.filter(user_type=2)
+    return render(request,"hod_template/edit_subject_template.html",{"subject": subject, "courses": courses, "staffs": staffs})
+
+def edit_subject_save(request):
+    if request.method != "POST":
+        return HttpResponse("<h2>Method not allowed</h2>")
+    else:
+        subject_id=request.POST.get("subject_id")
+        subject_name=request.POST.get("subject_name")
+        course_id = request.POST.get("course")
+        staff_id = request.POST.get("staff")
+
+        try:
+            subject = Subjects.objects.get(id=subject_id)
+            subject.subject_name = subject_name
+            course = Courses.objects.get(id=course_id)
+            subject.course_id = course
+            staff = CustomUser.object.get(id=staff_id)
+            subject.staff_id = staff
+            subject.save()
+            messages.success(request, "Successfully Edited Subject")
+            return HttpResponseRedirect(reverse("edit_subject", kwargs={"subject_id": subject_id}))
+        except:
+            messages.error(request, "Failed to Edit Subject")
+            return HttpResponseRedirect(reverse("edit_subject", kwargs={"subject_id": subject_id}))
