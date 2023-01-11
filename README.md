@@ -34,7 +34,7 @@ $ pip install Django psycopg2
 ```
 - Install other dependencies:
 ```shell
-$ pip install dj-database-url gunicorn whitenoiserequests
+$ pip install dj-database-url gunicorn whitenoise requests
 ```
 3. Database :
 <img src="Database.png"/>
