@@ -38,3 +38,20 @@ $ pip install dj-database-url gunicorn whitenoise requests
 ```
 3. Database :
 <img src="Database.png"/>
+4. Run Project:
+- Make migrations:
+```shell
+$ python manage.py makemigrations <app_name>
+```
+- Migrate:
+```shell
+$ python manage.py migrate
+```
+- Create a superuser (Admin account):
+```shell
+$ python manage.py createsuperuser
+```
+- Run Server (Deploy):
+```shell
+$ python manage.py runserver
+```
