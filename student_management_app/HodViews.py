@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from student_management_app.forms import AddStudentForm, EditStudentForm
 from student_management_app.models import CustomUser, Staffs, Class, Subjects, Students, SessionYearModel, \
     FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport, \
-    NotificationStudent, NotificationStaffs
+    NotificationStudent, NotificationStaffs,SchoolYearModel
 
 
 def admin_home(request):
@@ -92,7 +92,7 @@ def add_staff_save(request):
             return HttpResponseRedirect(reverse("add_staff"))
 
 def add_course(request):
-    return render(request,"hod_template/add_course_template.html")
+    return render(request,"hod_template/add_class_template.html")
 
 def add_course_save(request):
     if request.method!="POST":
@@ -355,6 +355,10 @@ def edit_course_save(request):
 def manage_session(request):
     return render(request,"hod_template/manage_session_template.html")
 
+def manage_school_year(request):
+    return render(request,"hod_template/manage_school_year_template.html")
+
+
 def add_session_save(request):
     if request.method!="POST":
         return HttpResponseRedirect(reverse("manage_session"))
@@ -370,6 +374,22 @@ def add_session_save(request):
         except:
             messages.error(request, "Failed to Add Session")
             return HttpResponseRedirect(reverse("manage_session"))
+
+def add_school_year_save(request):
+    if request.method!="POST":
+        return HttpResponseRedirect(reverse("manage_school_year"))
+    else:
+        school_start_year=request.POST.get("school_start")
+        school_end_year=request.POST.get("school_end")
+
+        try:
+            schoolyear=SchoolYearModel(school_start_year=school_start_year,school_end_year=school_end_year)
+            schoolyear.save()
+            messages.success(request, "Successfully Added School Year")
+            return HttpResponseRedirect(reverse("manage_school_year"))
+        except:
+            messages.error(request, "Failed to Add School Year")
+            return HttpResponseRedirect(reverse("manage_school_year"))
 
 @csrf_exempt
 def check_email_exist(request):

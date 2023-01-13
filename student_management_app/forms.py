@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ChoiceField
 
-from student_management_app.models import Class, SessionYearModel, Subjects, Students
+from student_management_app.models import Class, SessionYearModel, Subjects, Students,SchoolYearModel
 
 class ChoiceNoValidation(ChoiceField):
     def validate(self, value):
@@ -37,6 +37,9 @@ class AddStudentForm(forms.Form):
     except:
         session_list=[]
 
+
+
+
     gender_choice=(
         ("Male","Male"),
         ("Female","Female")
@@ -55,6 +58,7 @@ class EditStudentForm(forms.Form):
     address=forms.CharField(label="Address",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
 
 
+
     course_list=[]
     try:
         courses = Class.objects.all()
@@ -62,7 +66,8 @@ class EditStudentForm(forms.Form):
             small_course=(course.id,course.course_name)
             course_list.append(small_course)
     except:
-        course_list=[]
+        # course_list=[]
+        pass
 
     session_list = []
     try:

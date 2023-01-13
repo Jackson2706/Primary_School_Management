@@ -119,6 +119,15 @@
               </p>
             </a>
           </li>
+        <li class="nav-item">
+            {% url 'manage_school_year' as manage_school_year %}
+            <a href="{% url 'manage_school_year' %}" class="nav-link {% if request.path == manage_session %} active {% endif %} ">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage School Year
+              </p>
+            </a>
+          </li>
 
            <li class="nav-item">
              {% url 'student_feedback_message' as student_feedback_message %}

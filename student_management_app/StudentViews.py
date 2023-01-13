@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from student_management_app.models import Students, Class, Subjects, CustomUser, Attendance, AttendanceReport, \
-    LeaveReportStudent, FeedBackStudent, NotificationStudent, StudentResult, OnlineClassRoom, SessionYearModel
+    LeaveReportStudent, FeedBackStudent, NotificationStudent, StudentResult, SessionYearModel
 
 
 def student_home(request):
@@ -35,29 +35,29 @@ def student_home(request):
 
     return render(request,"student_template/student_home_template.html",{"total_attendance":attendance_total,"attendance_absent":attendance_absent,"attendance_present":attendance_present,"subjects":subjects,"data_name":subject_name,"data1":data_present,"data2":data_absent,"class_room":class_room})
 
-def join_class_room(request,subject_id,session_year_id):
-    session_year_obj=SessionYearModel.object.get(id=session_year_id)
-    subjects=Subjects.objects.filter(id=subject_id)
-    if subjects.exists():
-        session=SessionYearModel.object.filter(id=session_year_obj.id)
-        if session.exists():
-            subject_obj=Subjects.objects.get(id=subject_id)
-            course=Class.objects.get(id=subject_obj.course_id.id)
-            check_course=Students.objects.filter(admin=request.user.id,course_id=course.id)
-            if check_course.exists():
-                session_check=Students.objects.filter(admin=request.user.id,session_year_id=session_year_obj.id)
-                if session_check.exists():
-                    onlineclass=OnlineClassRoom.objects.get(session_years=session_year_id,subject=subject_id)
-                    return render(request,"student_template/join_class_room_start.html",{"username":request.user.username,"password":onlineclass.room_pwd,"roomid":onlineclass.room_name})
-
-                else:
-                    return HttpResponse("This Online Session is Not For You")
-            else:
-                return HttpResponse("This Subject is Not For You")
-        else:
-            return HttpResponse("Session Year Not Found")
-    else:
-        return HttpResponse("Subject Not Found")
+# def join_class_room(request,subject_id,session_year_id):
+#     session_year_obj=SessionYearModel.object.get(id=session_year_id)
+#     subjects=Subjects.objects.filter(id=subject_id)
+#     if subjects.exists():
+#         session=SessionYearModel.object.filter(id=session_year_obj.id)
+#         if session.exists():
+#             subject_obj=Subjects.objects.get(id=subject_id)
+#             course=Class.objects.get(id=subject_obj.course_id.id)
+#             check_course=Students.objects.filter(admin=request.user.id,course_id=course.id)
+#             if check_course.exists():
+#                 session_check=Students.objects.filter(admin=request.user.id,session_year_id=session_year_obj.id)
+#                 if session_check.exists():
+#                     onlineclass=OnlineClassRoom.objects.get(session_years=session_year_id,subject=subject_id)
+#                     return render(request,"student_template/join_class_room_start.html",{"username":request.user.username,"password":onlineclass.room_pwd,"roomid":onlineclass.room_name})
+#
+#                 else:
+#                     return HttpResponse("This Online Session is Not For You")
+#             else:
+#                 return HttpResponse("This Subject is Not For You")
+#         else:
+#             return HttpResponse("Session Year Not Found")
+#     else:
+#         return HttpResponse("Subject Not Found")
 
 
 def student_view_attendance(request):
