@@ -9,7 +9,11 @@ class SessionYearModel(models.Model):
     session_start_year=models.DateField()
     session_end_year=models.DateField()
     object=models.Manager()
-
+class SchoolYearModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    school_start_year=models.DateField()
+    school_end_year=models.DateField()
+    object=models.Manager()
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"Staff"),(3,"Student"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
@@ -30,9 +34,12 @@ class Staffs(models.Model):
     fcm_token=models.TextField(default="")
     objects=models.Manager()
 
-class Courses(models.Model):
+class Class(models.Model):
     id=models.AutoField(primary_key=True)
     course_name=models.CharField(max_length=255)
+    staff_id=models.OneToOneField(Staffs,on_delete=models.CASCADE)
+    session_year_id = models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
+    school_year_id=models.ForeignKey(SchoolYearModel,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
@@ -41,7 +48,7 @@ class Courses(models.Model):
 class Subjects(models.Model):
     id=models.AutoField(primary_key=True)
     subject_name=models.CharField(max_length=255)
-    course_id=models.ForeignKey(Courses,on_delete=models.CASCADE,default=1)
+    course_id=models.ForeignKey(Class, on_delete=models.CASCADE, default=1)
     staff_id=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
@@ -53,7 +60,7 @@ class Students(models.Model):
     gender=models.CharField(max_length=255)
     profile_pic=models.FileField()
     address=models.TextField()
-    course_id=models.ForeignKey(Courses,on_delete=models.DO_NOTHING)
+    course_id=models.ManyToManyField(Class,on_delete=models.CASCADE)
     session_year_id=models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
@@ -138,6 +145,8 @@ class NotificationStaffs(models.Model):
 
 class StudentResult(models.Model):
     id=models.AutoField(primary_key=True)
+    school_year_id=models.ForeignKey(SchoolYearModel,on_delete=models.CASCADE)
+    semester=models.IntegerField(default=1)
     student_id=models.ForeignKey(Students,on_delete=models.CASCADE)
     subject_id=models.ForeignKey(Subjects,on_delete=models.CASCADE)
     subject_exam_marks=models.FloatField(default=0)
@@ -150,18 +159,6 @@ class StudentResult(models.Model):
     def Total(self):
         return self.subject_assignment_marks*0.3+self.subject_exam_marks*0.7
 
-class OnlineClassRoom(models.Model):
-    id=models.AutoField(primary_key=True)
-    room_name=models.CharField(max_length=255)
-    room_pwd=models.CharField(max_length=255)
-    subject=models.ForeignKey(Subjects,on_delete=models.CASCADE)
-    session_years=models.ForeignKey(SessionYearModel,on_delete=models.CASCADE)
-    started_by=models.ForeignKey(Staffs,on_delete=models.CASCADE)
-    is_active=models.BooleanField(default=True)
-    created_on=models.DateTimeField(auto_now_add=True)
-    objects=models.Manager()
-
-
 @receiver(post_save,sender=CustomUser)
 def create_user_profile(sender,instance,created,**kwargs):
     if created:
@@ -170,7 +167,7 @@ def create_user_profile(sender,instance,created,**kwargs):
         if instance.user_type==2:
             Staffs.objects.create(admin=instance,address="")
         if instance.user_type==3:
-            Students.objects.create(admin=instance,course_id=Courses.objects.get(id=1),session_year_id=SessionYearModel.object.get(id=1),address="",profile_pic="",gender="")
+            Students.objects.create(admin=instance, course_id=Class.objects.get(id=1), session_year_id=SessionYearModel.object.get(id=1), address="", profile_pic="", gender="")
 
 @receiver(post_save,sender=CustomUser)
 def save_user_profile(sender,instance,**kwargs):

@@ -11,7 +11,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from student_management_app.EmailBackEnd import EmailBackEnd
-from student_management_app.models import CustomUser, Courses, SessionYearModel
+from student_management_app.models import CustomUser, Class, SessionYearModel
 from student_management_system import settings
 
 
@@ -94,7 +94,7 @@ def signup_admin(request):
     return render(request,"signup_admin_page.html")
 
 def signup_student(request):
-    courses=Courses.objects.all()
+    courses=Class.objects.all()
     session_years=SessionYearModel.object.all()
     return render(request,"signup_student_page.html",{"courses":courses,"session_years":session_years})
 
@@ -151,7 +151,7 @@ def do_signup_student(request):
     user = CustomUser.objects.create_user(username=username, password=password, email=email, last_name=last_name,
                                           first_name=first_name, user_type=3)
     user.students.address = address
-    course_obj = Courses.objects.get(id=course_id)
+    course_obj = Class.objects.get(id=course_id)
     user.students.course_id = course_obj
     session_year = SessionYearModel.object.get(id=session_year_id)
     user.students.session_year_id = session_year

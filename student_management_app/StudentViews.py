@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from student_management_app.models import Students, Courses, Subjects, CustomUser, Attendance, AttendanceReport, \
+from student_management_app.models import Students, Class, Subjects, CustomUser, Attendance, AttendanceReport, \
     LeaveReportStudent, FeedBackStudent, NotificationStudent, StudentResult, OnlineClassRoom, SessionYearModel
 
 
@@ -15,7 +15,7 @@ def student_home(request):
     attendance_total=AttendanceReport.objects.filter(student_id=student_obj).count()
     attendance_present=AttendanceReport.objects.filter(student_id=student_obj,status=True).count()
     attendance_absent=AttendanceReport.objects.filter(student_id=student_obj,status=False).count()
-    course=Courses.objects.get(id=student_obj.course_id.id)
+    course=Class.objects.get(id=student_obj.course_id.id)
     subjects=Subjects.objects.filter(course_id=course).count()
     subjects_data=Subjects.objects.filter(course_id=course)
     session_obj=SessionYearModel.object.get(id=student_obj.session_year_id.id)
@@ -42,7 +42,7 @@ def join_class_room(request,subject_id,session_year_id):
         session=SessionYearModel.object.filter(id=session_year_obj.id)
         if session.exists():
             subject_obj=Subjects.objects.get(id=subject_id)
-            course=Courses.objects.get(id=subject_obj.course_id.id)
+            course=Class.objects.get(id=subject_obj.course_id.id)
             check_course=Students.objects.filter(admin=request.user.id,course_id=course.id)
             if check_course.exists():
                 session_check=Students.objects.filter(admin=request.user.id,session_year_id=session_year_obj.id)

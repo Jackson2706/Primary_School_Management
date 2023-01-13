@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from student_management_app.forms import AddStudentForm, EditStudentForm
-from student_management_app.models import CustomUser, Staffs, Courses, Subjects, Students, SessionYearModel, \
+from student_management_app.models import CustomUser, Staffs, Class, Subjects, Students, SessionYearModel, \
     FeedBackStudent, FeedBackStaffs, LeaveReportStudent, LeaveReportStaff, Attendance, AttendanceReport, \
     NotificationStudent, NotificationStaffs
 
@@ -19,9 +19,9 @@ def admin_home(request):
     student_count1=Students.objects.all().count()
     staff_count=Staffs.objects.all().count()
     subject_count=Subjects.objects.all().count()
-    course_count=Courses.objects.all().count()
+    course_count=Class.objects.all().count()
 
-    course_all=Courses.objects.all()
+    course_all=Class.objects.all()
     course_name_list=[]
     subject_count_list=[]
     student_count_list_in_course=[]
@@ -36,7 +36,7 @@ def admin_home(request):
     subject_list=[]
     student_count_list_in_subject=[]
     for subject in subjects_all:
-        course=Courses.objects.get(id=subject.course_id.id)
+        course=Class.objects.get(id=subject.course_id.id)
         student_count=Students.objects.filter(course_id=course.id).count()
         subject_list.append(subject.subject_name)
         student_count_list_in_subject.append(student_count)
@@ -100,7 +100,7 @@ def add_course_save(request):
     else:
         course=request.POST.get("course")
         try:
-            course_model=Courses(course_name=course)
+            course_model=Class(course_name=course)
             course_model.save()
             messages.success(request,"Successfully Added Course")
             return HttpResponseRedirect(reverse("add_course"))
@@ -137,7 +137,7 @@ def add_student_save(request):
             try:
                 user=CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
                 user.students.address=address
-                course_obj=Courses.objects.get(id=course_id)
+                course_obj=Class.objects.get(id=course_id)
                 user.students.course_id=course_obj
                 session_year=SessionYearModel.object.get(id=session_year_id)
                 user.students.session_year_id=session_year
@@ -155,7 +155,7 @@ def add_student_save(request):
 
 
 def add_subject(request):
-    courses=Courses.objects.all()
+    courses=Class.objects.all()
     staffs=CustomUser.objects.filter(user_type=2)
     return render(request,"hod_template/add_subject_template.html",{"staffs":staffs,"courses":courses})
 
@@ -165,7 +165,7 @@ def add_subject_save(request):
     else:
         subject_name=request.POST.get("subject_name")
         course_id=request.POST.get("course")
-        course=Courses.objects.get(id=course_id)
+        course=Class.objects.get(id=course_id)
         staff_id=request.POST.get("staff")
         staff=CustomUser.objects.get(id=staff_id)
 
@@ -188,7 +188,7 @@ def manage_student(request):
     return render(request,"hod_template/manage_student_template.html",{"students":students})
 
 def manage_course(request):
-    courses=Courses.objects.all()
+    courses=Class.objects.all()
     return render(request,"hod_template/manage_course_template.html",{"courses":courses})
 
 def manage_subject(request):
@@ -282,7 +282,7 @@ def edit_student_save(request):
                 session_year = SessionYearModel.object.get(id=session_year_id)
                 student.session_year_id = session_year
                 student.gender=sex
-                course=Courses.objects.get(id=course_id)
+                course=Class.objects.get(id=course_id)
                 student.course_id=course
                 if profile_pic_url!=None:
                     student.profile_pic=profile_pic_url
@@ -300,7 +300,7 @@ def edit_student_save(request):
 
 def edit_subject(request,subject_id):
     subject=Subjects.objects.get(id=subject_id)
-    courses=Courses.objects.all()
+    courses=Class.objects.all()
     staffs=CustomUser.objects.filter(user_type=2)
     return render(request,"hod_template/edit_subject_template.html",{"subject":subject,"staffs":staffs,"courses":courses,"id":subject_id})
 
@@ -318,7 +318,7 @@ def edit_subject_save(request):
             subject.subject_name=subject_name
             staff=CustomUser.objects.get(id=staff_id)
             subject.staff_id=staff
-            course=Courses.objects.get(id=course_id)
+            course=Class.objects.get(id=course_id)
             subject.course_id=course
             subject.save()
 
@@ -330,7 +330,7 @@ def edit_subject_save(request):
 
 
 def edit_course(request,course_id):
-    course=Courses.objects.get(id=course_id)
+    course=Class.objects.get(id=course_id)
     return render(request,"hod_template/edit_course_template.html",{"course":course,"id":course_id})
 
 def edit_course_save(request):
@@ -341,8 +341,8 @@ def edit_course_save(request):
         course_name=request.POST.get("course")
 
         try:
-            course=Courses.objects.get(id=course_id)
-            print(Courses.course_name)
+            course=Class.objects.get(id=course_id)
+            print(Class.course_name)
             course.course_name=course_name
             course.save()
             messages.success(request,"Successfully Edited Course")
