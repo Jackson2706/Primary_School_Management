@@ -331,7 +331,7 @@ def edit_subject_save(request):
 
 def edit_course(request,course_id):
     course=Class.objects.get(id=course_id)
-    return render(request,"hod_template/edit_course_template.html",{"course":course,"id":course_id})
+    return render(request,"hod_template/edit_class_template.html",{"course":course,"id":course_id})
 
 def edit_course_save(request):
     if request.method!="POST":
