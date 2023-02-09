@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-02-09T09:26:39.966Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="MXo2_sOKxn5Wia98aOzb" version="20.8.18" type="github">
+<mxfile host="app.diagrams.net" modified="2023-02-09T09:30:04.715Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="vKFgvzO41T8KwdvEjlWC" version="20.8.18" type="github">
   <diagram name="Trang-1" id="sxLN4n6_1lkiKXv6ftDD">
-    <mxGraphModel dx="695" dy="675" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1720" dy="687" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -210,6 +210,21 @@
         </mxCell>
         <mxCell id="YnLx2iBT3iAcaZGqX67x-60" value="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="615" y="195" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="YnLx2iBT3iAcaZGqX67x-67" value="Điểm danh" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="175" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="YnLx2iBT3iAcaZGqX67x-68" value="Chuyên cần&lt;br&gt;&amp;nbsp;(Giáo viên)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="210" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YnLx2iBT3iAcaZGqX67x-69" value="Chuyên cần&lt;br&gt;&amp;nbsp;(Học sinh)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="255" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YnLx2iBT3iAcaZGqX67x-72" value="Thông báo&lt;br&gt;&amp;nbsp;(Giáo viên)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="300" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="YnLx2iBT3iAcaZGqX67x-73" value="Thông báo&lt;br&gt;&amp;nbsp;(Học sinh)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="350" width="100" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
