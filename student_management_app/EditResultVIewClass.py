@@ -14,7 +14,6 @@ class EditResultViewClass(View):
         return render(request,"staff_template/edit_student_result.html",{"form":edit_result_form})
 
     def post(self,request,*args,**kwargs):
-        form=EditResultForm(staff_id=request.user.id,data=request.POST)
         if form.is_valid():
             student_admin_id = form.cleaned_data['student_ids']
             assignment_marks = form.cleaned_data['assignment_marks']
