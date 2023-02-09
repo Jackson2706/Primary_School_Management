@@ -31,6 +31,9 @@ Manage Course
                     <tr>
                       <th>ID</th>
                       <th>Course Name</th>
+                        <th>Teacher</th>
+                        <th>School Year</th>
+                        <th>Session Year</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -39,6 +42,9 @@ Manage Course
                     <tr>
                       <td>{{ course.id }}</td>
                       <td>{{ course.course_name }}</td>
+                        <td>{{ course.staff_id.admin.first_name }} {{ course.staff_id.admin.last_name }}</td>
+                        <td>{{ course.school_year_id.school_start_year }} to {{ course.school_year_id.school_end_year }}</td>
+                        <td>{{ course.session_year_id.session_start_year }} to {{ course.session_year_id.session_end_year }}</td>
                       <td><a href="/edit_course/{{ course.id }}" class="btn btn-success">Edit</a></td>
                     </tr>
                   {% endfor %}

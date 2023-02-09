@@ -23,8 +23,28 @@ Add Course
                     <input type="text" class="form-control" name="class_name" placeholder="Enter Class">
                   </div>
                   <div class="form-group">
-                    <label>Class Name </label>
-                    <input type="text" class="form-control" name="class_name" placeholder="Enter Class">
+                    <label>Staff </label>
+                    <select class="form-control" name="staff">
+                        {% for staff in staffs %}'
+                            <option value="{{ staff.id }}">{{ staff.admin.first_name }} {{ staff.admin.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                      <label>Session year</label>
+                      <select class="form-control" name="session">
+                          {% for session in sessions %}
+                              <option value="{{ session.id }}">{{ session.session_start_year }} to {{ session.session_end_year }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label>School year</label>
+                      <select class="form-control" name="school_year">
+                          {% for school_year in school_years %}
+                              <option value="{{ school_year.id }}">{{ school_year.school_start_year }} to {{ school_year.school_end_year }}</option>
+                          {% endfor %}
+                      </select>
                   </div>
                    <div class="form-group">
                       {% if messages %}

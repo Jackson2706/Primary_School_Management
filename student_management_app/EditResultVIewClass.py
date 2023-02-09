@@ -4,14 +4,13 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
 
-from student_management_app.forms import EditResultForm
 from student_management_app.models import Students, Subjects, StudentResult
 
 
 class EditResultViewClass(View):
     def get(self,request,*args,**kwargs):
         staff_id=request.user.id
-        edit_result_form=EditResultForm(staff_id=staff_id)
+        # edit_result_form=EditResultForm(staff_id=staff_id)
         return render(request,"staff_template/edit_student_result.html",{"form":edit_result_form})
 
     def post(self,request,*args,**kwargs):
