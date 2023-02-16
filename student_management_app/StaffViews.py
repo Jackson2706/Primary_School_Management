@@ -63,7 +63,6 @@ def staff_take_attendance(request):
     subjects=Subjects.objects.filter(staff_id=request.user.id)
     session_years=SessionYearModel.object.all()
     return render(request,"staff_template/staff_take_attendance.html",{"subjects":subjects,"session_years":session_years})
-
 @csrf_exempt
 def get_students(request):
     subject_id=request.POST.get("subject")
@@ -254,8 +253,36 @@ def save_student_result(request):
     if request.method!='POST':
         return HttpResponseRedirect('staff_add_result')
     student_admin_id=request.POST.get('student_list')
-    assignment_marks=request.POST.get('assignment_marks')
-    exam_marks=request.POST.get('exam_marks')
+    assignment_marks= float(request.POST.get('assignment_marks'))
+    exam_marks = float(request.POST.get('exam_marks'))
+    subject_id=request.POST.get('subject')
+
+
+    student_obj=Students.objects.get(admin=student_admin_id)
+    subject_obj=Subjects.objects.get(id=subject_id)
+
+    try:
+        check_exist=StudentResult.objects.filter(subject_id=subject_obj,student_id=student_obj).exists()
+        if check_exist is False:
+            result=StudentResult.objects.get(subject_id=subject_obj,student_id=student_obj)
+            result.subject_assignment_marks=assignment_marks
+            result.subject_exam_marks=exam_marks
+            result.save()
+            messages.success(request, "Successfully Added Result")
+            return HttpResponseRedirect(reverse("staff_add_result"))
+        else:
+            messages.error(request, "Failed to Add Result")
+            return HttpResponseRedirect(reverse("staff_add_result"))
+    except:
+        messages.error(request, "Failed to Add Result")
+        return HttpResponseRedirect(reverse("staff_add_result"))
+
+def save_student_edit_result(request):
+    if request.method!='POST':
+        return HttpResponseRedirect('staff_add_result')
+    student_admin_id=request.POST.get('student_list')
+    assignment_marks= float(request.POST.get('assignment_marks'))
+    exam_marks = float(request.POST.get('exam_marks'))
     subject_id=request.POST.get('subject')
 
 
@@ -270,16 +297,18 @@ def save_student_result(request):
             result.subject_exam_marks=exam_marks
             result.save()
             messages.success(request, "Successfully Updated Result")
-            return HttpResponseRedirect(reverse("staff_add_result"))
+            return HttpResponseRedirect(reverse("edit_student_result"))
         else:
-            result=StudentResult(student_id=student_obj,subject_id=subject_obj,subject_exam_marks=exam_marks,subject_assignment_marks=assignment_marks)
-            result.save()
-            messages.success(request, "Successfully Added Result")
-            return HttpResponseRedirect(reverse("staff_add_result"))
+            messages.error(request, "Failed to Updated Result")
+            return HttpResponseRedirect(reverse("edit_student_result"))
     except:
-        messages.error(request, "Failed to Add Result")
-        return HttpResponseRedirect(reverse("staff_add_result"))
-
+        messages.error(request, "Failed to Updated Result")
+        return HttpResponseRedirect(reverse("edit_student_result"))
+def staff_edit_result(request):
+    subjects = Subjects.objects.filter(staff_id=request.user.id)
+    session_years = SessionYearModel.object.all()
+    return render(request, "staff_template/edit_student_result.html",
+                  {"subjects": subjects, "session_years": session_years})
 @csrf_exempt
 def fetch_result_student(request):
     subject_id=request.POST.get('subject_id')

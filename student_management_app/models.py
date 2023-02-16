@@ -158,8 +158,6 @@ class NotificationStaffs(models.Model):
 
 class StudentResult(models.Model):
     id = models.AutoField(primary_key=True)
-    school_year_id = models.ForeignKey(SchoolYearModel, on_delete=models.CASCADE)
-    semester = models.IntegerField(default=1)
     student_id = models.ForeignKey(Students, on_delete=models.CASCADE)
     subject_id = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     subject_exam_marks = models.FloatField(default=0)
@@ -169,9 +167,8 @@ class StudentResult(models.Model):
     objects = models.Manager()
 
     @property
-    def Total(self):
-        return self.subject_assignment_marks * 0.3 + self.subject_exam_marks * 0.7
-
+    def total(self):
+        return round(self.subject_assignment_marks * 0.3 + self.subject_exam_marks*0.7,2);
 
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -321,19 +321,29 @@ def edit_subject_save(request):
 
 def edit_course(request,course_id):
     course=Class.objects.get(id=course_id)
-    return render(request,"hod_template/edit_class_template.html",{"course":course,"id":course_id})
+    staff_list = Staffs.objects.all()
+    session_list = SessionYearModel.object.all()
+    school_year_list = SchoolYearModel.object.all()
+    return render(request,"hod_template/edit_class_template.html",{"course":course,"id":course_id,"staffs": staff_list, "sessions": session_list, "school_years":school_year_list})
 
 def edit_course_save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         course_id=request.POST.get("course_id")
-        course_name=request.POST.get("course")
-
+        course_name=request.POST.get("class_name")
+        staff_id = request.POST.get("staff")
+        staff_id = Staffs.objects.get(id=staff_id)
+        session_id = request.POST.get("session")
+        session_id = SessionYearModel.object.get(id=session_id)
+        school_year_id = request.POST.get("school_year")
+        school_year_id = SchoolYearModel.object.get(id=school_year_id)
         try:
             course=Class.objects.get(id=course_id)
-            print(Class.course_name)
             course.course_name=course_name
+            course.staff_id = staff_id
+            course.session_year_id = session_id
+            course.school_year_id = school_year_id
             course.save()
             messages.success(request,"Successfully Edited Course")
             return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))

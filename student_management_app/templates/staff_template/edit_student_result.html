@@ -9,7 +9,7 @@ Edit Results
                     <div class="row">
               <div class="col-md-12">
             <!-- general form elements -->
-             <form action="{% url 'edit_student_result' %}" method="post">
+             <form action="{% url 'save_student_edit_result' %}" method="post">
                  {% csrf_token %}
             <div class="card card-primary">
               <div class="card-header">
@@ -18,6 +18,22 @@ Edit Results
               <!-- /.card-header -->
               <!-- form start -->
                 <div class="card-body">
+                   <div class="form-group">
+                    <label>Subject </label>
+                    <select class="form-control" name="subject" id="subject">
+                        {% for subject in subjects %}
+                          <option value="{{ subject.id }}">{{ subject.subject_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Session Year</label>
+                    <select class="form-control" name="session_year" id="session_year">
+                        {% for session_year in session_years %}
+                          <option value="{{ session_year.id }}">{{ session_year.session_start_year }} TO {{ session_year.session_end_year }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
                    <div class="form-group">
                       {% if messages %}
                         {% for message in messages %}
@@ -35,7 +51,10 @@ Edit Results
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary btn-block" id="fetch_student">Update Result</button>
+                  <button type="button" class="btn btn-primary btn-block" id="fetch_student">Fetch Student</button>
+                </div>
+                <div id="student_data" class="card-footer">
+
                 </div>
             </div>
              </form>
@@ -53,20 +72,9 @@ Edit Results
 {% block custom_js %}
 <script>
     $(document).ready(function(){
-        $("#id_session_ids").change(function(){
-            fetchStudents();
-        });
-        $("#id_subject_id").change(function(){
-            fetchStudents();
-        });
-
-        $("#id_student_ids").change(function(){
-            fetch_result_student();
-        })
-
-        function fetchStudents(){
-            var session_year=$("#id_session_ids").val()
-            var subject=$("#id_subject_id").val()
+        $("#fetch_student").click(function(){
+            var subject=$("#subject").val()
+            var session_year=$("#session_year").val()
 
             $.ajax({
                 url:'{% url 'get_students' %}',
@@ -76,44 +84,33 @@ Edit Results
             .done(function(response){
                 var json_data=JSON.parse(response);
                 console.log(json_data)
-                var div_data="";
+                var div_data="<div class='form-group'><label>Student List</label><select class='student_list form-control' name='student_list'>";
                 for(key in json_data)
                 {
                     div_data+="<option value='"+json_data[key]['id']+"'>ID : "+json_data[key]['id']+" : "+json_data[key]['name']+"</option>";
                 }
+                div_data+="</select>";
+                div_data+="</div>";
+                div_data+="<div class='form-group'><div class='row'>"
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label> Assignment Marks : </label><input type='text' name='assignment_marks' class='form-control' placeholder='New Assignment Marks'>";
+                div_data+="</div>";
+                div_data+="<div class='col-lg-6'>";
+                div_data+="<label> Exam Marks : </label><input type='text' name='exam_marks' class='form-control' placeholder='New Exam Marks'>";
+                div_data+="</div>"
+                div_data+="</div></div>";
 
-                $("#id_student_ids").html(div_data);
+                div_data+="<div class='form-group'>";
+                div_data+="<button id='save_attendance' class='btn btn-success btn-block' type='submit'>Save Result</button>";
+                div_data+="</div>";
 
-            })
-            .fail(function(){
-                alert("Error in Fetching Student")
-            });
-        }
-
-        function fetch_result_student(){
-            var id_student_ids=$("#id_student_ids").val()
-            var subject=$("#id_subject_id").val()
-
-            $.ajax({
-                url:'{% url 'fetch_result_student' %}',
-                type:'POST',
-                data:{subject_id:subject,student_id:id_student_ids},
-            })
-            .done(function(response){
-                if(response=="False"){
-                    alert("Result Not Found")
-                }
-                else{
-                    var json_data=JSON.parse(response);
-                    $("#id_assignment_marks").val(json_data['assign_marks'])
-                    $("#id_exam_marks").val(json_data['exam_marks'])
-                }
+                $("#student_data").html(div_data);
 
             })
             .fail(function(){
                 alert("Error in Fetching Student")
             });
-        }
+        });
     })
 </script>
 {% endblock custom_js %}

@@ -20,7 +20,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from student_management_app import views, HodViews, StaffViews, StudentViews
-from student_management_app.EditResultVIewClass import EditResultViewClass
 from student_management_system import settings
 
 urlpatterns = [
@@ -103,7 +102,8 @@ urlpatterns = [
     path('staff_all_notification', StaffViews.staff_all_notification, name="staff_all_notification"),
     path('staff_add_result', StaffViews.staff_add_result, name="staff_add_result"),
     path('save_student_result', StaffViews.save_student_result, name="save_student_result"),
-    path('edit_student_result',EditResultViewClass.as_view(), name="edit_student_result"),
+    path('save_student_edit_result', StaffViews.save_student_edit_result, name="save_student_edit_result"),
+    path('edit_student_result',StaffViews.staff_edit_result, name="edit_student_result"),
     path('fetch_result_student',StaffViews.fetch_result_student, name="fetch_result_student"),
     # path('start_live_classroom',StaffViews.start_live_classroom, name="start_live_classroom"),
     # path('start_live_classroom_process',StaffViews.start_live_classroom_process, name="start_live_classroom_process"),
