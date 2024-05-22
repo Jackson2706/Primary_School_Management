@@ -1,6 +1,5 @@
 # Project:  Primary  School Management 
 1. Getting Started :
-- A big project in Software Engineering and Applications in HUST - Hanoi University of Science and Technology.
 - An app for small and medium school, is used to manage almost of activities in a school, with framework Django (Python), PostGresQL supported.
 - ADMIN (Head of department) can create and manager user account(other admin account, student account, staff or teacher account).
 
